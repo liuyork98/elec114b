@@ -1,0 +1,53 @@
+to2:
+
+je
+
+mo
+
+loopl:
+
+jmp
+
+loop3.
+
+clr
+
+mainl
+
+db 11111110b, 11111111b, 111111116
+
+db 01011100b ;- ------end code
+
+table4:
+
+db 01011100b ---end code
+
+table5:
+
+db 01011100b --end code
+
+table6:
+
+db 01011100b ; --end code
+
+delay:
+
+mov r7,#3
+
+d2:
+
+mov r6,#100
+
+d1:
+
+mov r5,#50
+
+djnz r5,$
+
+djnz r6,d1
+
+djnz r7,d2
+
+ret
+
+END
