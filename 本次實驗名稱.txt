@@ -1,56 +1,86 @@
-輸出入埠進階應用（8位數米字型顯示器與4X4鍵盤）
-
-mainl
-
-$NOMOD51
-
-$INCLUDE (8051.MCU)
-
-; CODE SEGMENT
-
-org
-
-00h
-
-mov
-
-p0,#11111111b
-
-mov
-
-p2,#111111116
-
-mov
-
-p3,#11111111b
-
-Loop:
-
-jb
-
-p1.0,sto0
-
-jb
-
-
-tablel:
-
-db
-
-10011100b,11111111b, 11111111b
-
-db
-
-11111111b, 10011100b, 11111111b
-
-db
-
-
-11111111b, 10100011b, 1111111
-
-db
-
-10100011b,111111116, 11111111b
-
-db
-
+//------------ main 3 -----------------------------------------------
+#include <REGX51.h>
+#include <STDIO.h>
+                               //0     //1    //2     //3     //4      //5     //6     //7    //8     //9    //a    //b   //c    //d    //e    //f
+code char  tab1[]={0xc0,0xf9,0xe4,0xf0 ,0xd9,0xd2,0xc2,0xd8,0xc0,0xd0,0xff,0xff,0xff,0xff,0xff,0xff};       //0~9
+code char  tab2[]={0xff ,0xff ,0xdd,0xdd,0xdd,0xdd,0xdd,0xff, 0xdd,0xdd,0xff,0xff,0xff,0xff,0xff,0xff};
+code char   com[]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};                                                   //scan_code
+char  disp1[8],disp2[8], ptr; key0=10;key1=10,key2=10,key3=10,key_pressed=0,key_val=10;
+//=====================================
+void display(void)
+{      P3=0x00;
+        //------------ 3 ---------------------------------------
+        disp1[0]=tab1[key3];disp2[0]=tab2[key3];
+        disp1[1]=tab1[key2];disp2[1]=tab2[key2];
+        disp1[2]=tab1[key1];disp2[2]=tab2[key1];
+        disp1[3]=tab1[key0];disp2[3]=tab2[key0];
+        
+        P0=disp1[ptr];P2=disp2[ptr];
+        P3=com[ptr];
+        ptr++;
+        if(ptr>=8) ptr=0;   
+}
+//=====================================
+void scankey(void)
+{
+        P1=0x7f;
+                if (P1_3==0)                                                                        //key0=7;     
+                        { key_val=7;key_pressed=1;while(P1_3==0);}              //delay(10)
+                if (P1_2==0)                                                                        //key0=8;    
+                        { key_val=8;key_pressed=1;while(P1_2==0);}     
+                if (P1_1==0)                                                                        //key0=9;    
+                        {key_val=9;key_pressed=1;while(P1_1==0);} 
+                if (P1_0==0)                                                                        //key0=10;   
+                        {key_val=10;key_pressed=1;while(P1_0==0);}
+       P1=0xbf;
+                if (P1_3==0)                                        //key0=4;   
+                        {key_val=4;key_pressed=1;while(P1_3==0);}
+                if (P1_2==0)                                        //key0=5;    
+                        {key_val=5;key_pressed=1;while(P1_2==0);}     
+                if (P1_1==0)                                        //key0=6;    
+                        {key_val=6;key_pressed=1;while(P1_1==0);}  
+                if (P1_0==0)                                        //key0=10;   
+                        {key_val=10;key_pressed=1;while(P1_0==0);}
+         P1=0xdf;
+                if (P1_3==0) //key0=1;    
+                        {key_val=1;key_pressed=1;while(P1_3==0);}
+                if (P1_2==0) //key0=2;    
+                        {key_val=2;key_pressed=1;while(P1_2==0);}    
+                if (P1_1==0) //key0=3;    
+                        {key_val=3;key_pressed=1;while(P1_1==0);}
+                if (P1_0==0) //key0=10;   
+                        {key_val=10;key_pressed=1;while(P1_0==0);}
+        P1=0xef;
+                if (P1_3==0) //key0=10;   
+                        {key_val=10;key_pressed=1;while(P1_3==0);}
+                if (P1_2==0) //key0=0;    
+                        {key_val=0;key_pressed=1;while(P1_2==0);}    
+                if (P1_1==0) //key0=10;  
+                        {key_val=10;key_pressed=1;while(P1_1==0);}   
+                if (P1_0==0) //key0=10;   
+                        {key_val=10;key_pressed=1;while(P1_0==0);}             
+}
+//=====================================
+void delay(unsigned int value)
+{while(value--); }
+//=====================================
+void main(void)
+ { 
+        disp1[0]=0xff;disp2[0]=0xdd;
+        disp1[1]=0xff;disp2[1]=0xdd;
+        disp1[2]=0xff;disp2[2]=0xdd;
+        disp1[3]=0xff;disp2[3]=0xdd;
+        disp1[4]=0xff;disp2[4]=0xdd;
+        disp1[5]=0xff;disp2[5]=0xdd;
+        disp1[6]=0xff;disp2[6]=0xdd;
+        disp1[7]=0xff;disp2[7]=0xdd;
+         
+   while (1)
+   {    P1=0xff;
+         scankey();
+           if (key_pressed==1)
+                {key3=key2;key2=key1;key1=key0; key0=key_val;key_pressed=0;}
+         display();
+         delay(100);
+   }
+ }
