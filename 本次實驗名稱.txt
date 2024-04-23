@@ -1,4 +1,4 @@
-mainl
+輸出入埠進階應用（8位數米字型顯示器與4X4鍵盤）
 
 mainl
 
@@ -32,111 +32,6 @@ p1.0,sto0
 
 jb
 
-pl.1,stol pl.2, sto2
-
-jb
-
-jmp
-
-loop
-
-sto0:
-
-mov
-
-dptr,#tablel
-
-jmp
-
-loopl
-
-stol:
-
-mov
-
-dptr, #table2
-
-jmp
-
-loopl
-
-sto2:
-
-mov
-
-dptr, #table3
-
-jmp
-
-loopl
-
-main program
-
-loopl:
-
-clr
-
-a
-
-movc
-
-a,@a+dptr
-
-cjne
-
-a, #01011100b, loop3
-
-jmp
-
-loop2
-
-loop3:
-
-mov
-
-po, a
-
-inc clr
-
-dpt r
-
-a a,@a+dptr
-
-movc mov
-
-p2,a
-
-inc
-
-dptr
-
-clr
-
-a
-
-movc
-
-a,@a+dptr
-
-mov
-
-p3, a
-
-call
-
-delay dptr
-
-inc
-
-jmp
-
-loopl
-
-loop2:
-
-jmp.
-
-loop
 
 tablel:
 
@@ -150,11 +45,6 @@ db
 
 db
 
-11111111b, 11111111b, 10011100b 111111116,11111111b, 10100011b
-
-db
-
-db
 
 11111111b, 10100011b, 1111111
 
@@ -164,6 +54,3 @@ db
 
 db
 
-11111111b, 10100011b, 11111111b
-
-第1頁
